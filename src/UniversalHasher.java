@@ -37,7 +37,7 @@ public class UniversalHasher {
     public int convertVectorToIntIndex(boolean[] vector){
         int res=0;
         int base =1;
-        for (int i = 0; i < INT_SIZE; i++) {
+        for (int i = 0; i < vector.length; i++) {
             if(vector[i])
                 res += base;
             base = base <<1;

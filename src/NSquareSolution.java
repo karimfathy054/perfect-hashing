@@ -58,7 +58,7 @@ public class NSquareSolution<T> {
                 return false;
             }
         }
-        this.table=temp;
+        this.table= temp;
         return true;
     }
     boolean search(int key,T value){
