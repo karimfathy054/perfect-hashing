@@ -13,22 +13,67 @@ public class NSquareHashTable<T> {
     Entry<T>[] table;
     int hashMatrixSize;
     int keyBitSize;
-
+    int inputSize;
     int rehashings;
 
     UniversalHasher hasher;
 
+    
+    public NSquareHashTable() {//constructor for small dynamic hashTable
+        this.dectionarySize = 1;
+        this.keyBitSize = 32;
+        int nSquare = dectionarySize*dectionarySize;
+        this.hashMatrixSize = (int)Math.ceil(Math.log(nSquare)/Math.log(2));
+        this.tableSize = (int)Math.pow(2,hashMatrixSize);
+        this.table = new Entry[this.tableSize];
+        this.inputSize = 0;
+        this.rehashings = 0;
+        this.hasher = new UniversalHasher(hashMatrixSize,keyBitSize);
+    }
+
+    boolean insertDynamicaly(int key,T value){
+        Entry<T> entry = new Entry<>(key, value);
+        int hashingIndex = hasher.getHashedindex(key);
+        if(table[hashingIndex] !=null && table[hashingIndex].key==key){//same key is inserted twice
+            return false;
+        }
+        if(inputSize==tableSize){//size won't fit
+            this.dectionarySize++;
+            int nSquare = dectionarySize*dectionarySize;
+            this.hashMatrixSize = (int)Math.ceil(Math.log(nSquare)/Math.log(2));
+            this.tableSize = (int)Math.pow(2,hashMatrixSize);
+            while(!rehashAndInsert(entry)){
+                this.rehashings +=1;
+            }
+            this.inputSize++;
+            return true;
+        }        
+        if(table[hashingIndex]==null){//no collision
+            table[hashingIndex]= entry;
+        }
+        else{//collision
+            while(!rehashAndInsert(entry)){
+                this.rehashings +=1;
+            }
+        }
+        
+        this.inputSize++;
+        return true;
+    }
     public NSquareHashTable(int dectionarySize, int keyBitSize) {
         this.dectionarySize = dectionarySize;
         this.keyBitSize = keyBitSize;
         int nSquare = dectionarySize*dectionarySize;
         this.hashMatrixSize = (int)Math.ceil(Math.log(nSquare)/Math.log(2));
         this.tableSize = (int)Math.pow(2,hashMatrixSize);
-        this.table = new Entry[tableSize];
+        this.table = new Entry[this.tableSize];
+        this.inputSize = 0;
         this.rehashings = 0;
         this.hasher = new UniversalHasher(hashMatrixSize,keyBitSize);
     }
     boolean insert(int key , T value){
+        if(inputSize==tableSize)
+            return false;
         Entry<T> entry = new Entry<>(key, value);
         int hashingIndex = hasher.getHashedindex(key);
         if(table[hashingIndex]==null){//no collision
@@ -39,15 +84,16 @@ public class NSquareHashTable<T> {
         }
         else{//collision
             while(!rehashAndInsert(entry)){
-                rehashings +=1;
+                this.rehashings +=1;
             }
         }
+        this.inputSize++;
         return true;
     }
     boolean rehashAndInsert(Entry e){
         Entry[] temp = new Entry[this.tableSize];
         this.hasher = new UniversalHasher(this.hashMatrixSize,this.keyBitSize);
-        for (int i = 0; i < this.tableSize; i++) {
+        for (int i = 0; i < table.length; i++) {
             if(this.table[i]==null)
                 continue;
             int hashingIndex = hasher.getHashedindex(this.table[i].key);
@@ -80,19 +126,27 @@ public class NSquareHashTable<T> {
         if(search(key, value)){
             int hashingIndex = hasher.getHashedindex(key);
             table[hashingIndex]= null;
+            this.inputSize--;
             return true;
         }
         return false;
     }
 
     // public static void main(String[] args) {
+    //     int [] arr = new int[0];
     //     String[] values = {"vsdhvbjh","vfdhnihnsdkjo","aseowjimnci","ckhbiashion"};
     //     int[] keys = new int[values.length];
     //     int i =  0;
     //     for (String string : values) {
     //         keys[i++]= string.hashCode();
     //     }
-    //     NSquareSolution<String> hashtable = new NSquareSolution<>(2, 32);
+    //     NSquareHashTable<String> hashtable = new NSquareHashTable<>(1, 32);
+    //     System.out.println(hashtable.insert(keys[0], values[0]));
+    //     System.out.println(hashtable.insertDynamicaly(keys[1], values[1]));
+    //     System.out.println(hashtable.insertDynamicaly(keys[2], values[2]));
+    //     System.out.println(hashtable.insertDynamicaly(keys[3], values[3]));
+
+
     //     for (int j = 0; j < keys.length; j++) {
     //         hashtable.insert(keys[j],values[j]);
     //     }
