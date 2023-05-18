@@ -1,4 +1,3 @@
-import javax.swing.text.Element;
 
 public class NSquareSolution<T> {
     class Entry<T>{
@@ -14,6 +13,7 @@ public class NSquareSolution<T> {
     Entry<T>[] table;
     int hashMatrixSize;
     int keyBitSize;
+
     int rehashings;
 
     UniversalHasher hasher;
@@ -28,17 +28,21 @@ public class NSquareSolution<T> {
         this.rehashings = 0;
         this.hasher = new UniversalHasher(hashMatrixSize,keyBitSize);
     }
-    void insert(int key , T value){
+    boolean insert(int key , T value){
         Entry<T> entry = new Entry<>(key, value);
         int hashingIndex = hasher.getHashedindex(key);
         if(table[hashingIndex]==null){//no collision
             table[hashingIndex]= entry;
+        }
+        else if(table[hashingIndex].key==key){//same key is inserted twice
+            return false;
         }
         else{//collision
             while(!rehash()){
                 rehashings +=1;
             }
         }
+        return true;
     }
     boolean rehash(){
         Entry[] temp = new Entry[this.tableSize];
@@ -57,4 +61,21 @@ public class NSquareSolution<T> {
         this.table=temp;
         return true;
     }
+    boolean search(int key,T value){
+        int hashingIndex = hasher.getHashedindex(key);
+        if(table[hashingIndex]!= null && table[hashingIndex].key==key && table[hashingIndex].value.equals(value)){
+            return true;
+        }
+        return false;
+    }
+
+    boolean delete(int key,T value){
+        if(search(key, value)){
+            int hashingIndex = hasher.getHashedindex(key);
+            table[hashingIndex]= null;
+            return true;
+        }
+        return false;
+    }
+
 }
