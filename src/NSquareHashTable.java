@@ -42,18 +42,18 @@ public class NSquareHashTable<T> {
             int nSquare = dictionarySize * dictionarySize;
             this.hashMatrixSize = (int) Math.ceil(Math.log(nSquare) / Math.log(2));
             this.tableSize = (int) Math.pow(2, hashMatrixSize);
-            while (!rehashAndInsert(entry)) {
+            do{
                 this.rehashings += 1;
-            }
+            }while (!rehashAndInsert(entry)) ;
             this.inputSize++;
             return true;
         }
         if (table[hashingIndex] == null) {//no collision
             table[hashingIndex] = entry;
         } else {//collision
-            while (!rehashAndInsert(entry)) {
+            do{
                 this.rehashings += 1;
-            }
+            }while (!rehashAndInsert(entry)) ;
         }
 
         this.inputSize++;
@@ -79,9 +79,9 @@ public class NSquareHashTable<T> {
         if (table[hashingIndex] == null) {//no collision
             table[hashingIndex] = entry;
         } else {//collision
-            while (!rehashAndInsert(entry)) {
+            do{
                 this.rehashings += 1;
-            }
+            }while (!rehashAndInsert(entry)); 
         }
 
         this.inputSize++;
@@ -109,9 +109,9 @@ public class NSquareHashTable<T> {
         } else if (table[hashingIndex].key == key) {//same key is inserted twice
             return false;
         } else {//collision
-            while (!rehashAndInsert(entry)) {
+            do{
                 this.rehashings += 1;
-            }
+            }while (!rehashAndInsert(entry)) ;
         }
         this.inputSize++;
         return true;
@@ -176,64 +176,6 @@ public class NSquareHashTable<T> {
         return allEntries;
     }
 
-    public int getDictionarySize() {
-        return dictionarySize;
-    }
 
-    public int getTableSize() {
-        return tableSize;
-    }
-
-    public Entry<T>[] getTable() {
-        return table;
-    }
-
-    public int getHashMatrixSize() {
-        return hashMatrixSize;
-    }
-
-    public int getKeyBitSize() {
-        return keyBitSize;
-    }
-
-    public int getInputSize() {
-        return inputSize;
-    }
-
-    public int getRehashings() {
-        return rehashings;
-    }
-
-    public UniversalHasher getHasher() {
-        return hasher;
-    }
-
-    public static void main(String[] args) {
-        class x{
-            int z;
-            int y;
-            public x(int z, int y) {
-                this.z = z;
-                this.y = y;
-            }
-            
-        }
-        x[] arr = new x[10];
-        arr[5] = new x(0, 0)    ;
-        arr[6] = new x(8, 8);
-        ArrayList<x> sa = new ArrayList<>();
-        for (x x : arr) {
-            if(x==null)
-                continue;
-            sa.add(x);
-        }
-        System.out.println("kemo");
-        int[] arra = new int [10];
-        arra[5]=5;
-        arra[7]=2;
-        for (int x : arra) {
-            System.out.println(x);
-        }
-    }
     
 }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * perfectHashTable
@@ -20,7 +21,7 @@ public class perfectHashTable<T> {
     public perfectHashTable(int primarydictionarySize,int keyBitSize) {
         this.primarydictionarySize = primarydictionarySize;
         this.keyBitSize = keyBitSize;
-        this.primaryHashMatrixSize = (int) Math.ceil(Math.log(primaryTableSize) / Math.log(2));
+        this.primaryHashMatrixSize = (int) Math.ceil(Math.log(primarydictionarySize) / Math.log(2));
         this.primaryTableSize = (int) Math.pow(2, primaryHashMatrixSize);
         this.primaryTable = new NSquareHashTable[primaryTableSize];
         this.count = new int[primaryTableSize] ;
@@ -52,9 +53,9 @@ public class perfectHashTable<T> {
         
         if(this.countSum>=2*primaryTableSize){
             //rehash
-            while (!primaryRehash()) {
+            do{
                 this.primaryTableRehashes++;
-            }
+            }while (!primaryRehash()) ;
         }
         return true;
     }
@@ -113,6 +114,41 @@ public class perfectHashTable<T> {
         this.countSum += (this.count[primaryIndex]*this.count[primaryIndex]) - (oldCount*oldCount);
         return true;
     }
+
+    // public static void main(String[] args) {
+    //     String[] values = {"fsdkhnvkh","vsdkgvhin","vsduigadhncvk","caslicjodsmn","acsvjkcajskl","ewfihfvbihi"};
+    //     perfectHashTable<String> hashtable = new perfectHashTable<>(4, 32);
+    //     for (String string : values) {
+    //         int x = string.hashCode();
+    //         hashtable.insert(x, string);
+    //     }
+    //     Scanner sc = new Scanner(System.in);
+    //     boolean flag = true;
+    //     while (flag) {
+    //         System.out.println("choose input");
+    //         int input = sc.nextInt();
+    //         sc.nextLine();
+    //         switch (input) {
+    //             case 1:
+    //                 System.out.println("delete ?");
+    //                 String st = sc.nextLine();
+    //                 int key = st.hashCode();
+    //                 System.out.println(hashtable.delete(key, st));
+    //                 break;
+    //             case 2:
+    //                 flag = false;
+    //             default:
+    //                 flag = false;
+    //                 break;
+    //         }
+    //     }
+    //     while (true) {
+    //         System.out.println("search for??");
+    //         String st = sc.nextLine();
+    //         int key = st.hashCode();
+    //         System.out.println(hashtable.search(key, st));
+    //     }
+    // }
     
 
 }
