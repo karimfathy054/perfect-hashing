@@ -13,6 +13,7 @@ public class perfectHashTable<T> {
     int keyBitSize;
     int primaryTableRehashes;
     int secondryTablesRehashes;
+    int countSum;
 
     UniversalHasher primaryHasher;
 
@@ -35,23 +36,21 @@ public class perfectHashTable<T> {
             int oldValue = primaryTable[primaryIndex].rehashings;
             primaryTable[primaryIndex].insertDynamicaly(key, value);
             this.secondryTablesRehashes+= primaryTable[primaryIndex].rehashings-oldValue;
-            this.count[primaryIndex] ++;
-            // loadFactor+=1;
+            int oldCount = this.count[primaryIndex] ++;
+            this.countSum += (this.count[primaryIndex]*this.count[primaryIndex]) - (oldCount*oldCount);
         }else{//cell has a bucket
             int oldValue = primaryTable[primaryIndex].rehashings;
             if(!primaryTable[primaryIndex].insertDynamicaly(key, value)){//same key is inserted twice
                 return false;
             }
             this.secondryTablesRehashes+= primaryTable[primaryIndex].rehashings-oldValue;
-            this.count[primaryIndex] ++;
+            int oldCount = this.count[primaryIndex] ++;
+            this.countSum += (this.count[primaryIndex]*this.count[primaryIndex]) - (oldCount*oldCount);
         }
         // should implement the next section in a better way
 
-        int countSum = 0;
-        for (int i : count) {
-            countSum += i*i;                    
-        }
-        if(countSum>=2*primaryTableSize){
+        
+        if(this.countSum>=2*primaryTableSize){
             //rehash
             while (!primaryRehash()) {
                 this.primaryTableRehashes++;
@@ -60,11 +59,12 @@ public class perfectHashTable<T> {
         return true;
     }
 
-    boolean primaryRehash(){
+    boolean primaryRehash(){/*rehashing needs to be optimised*/
         this.primaryHasher = new UniversalHasher(this.primaryHashMatrixSize, this.keyBitSize);
         ArrayList<Entry<T>> allEntries = getEntries();
         this.primaryTable = new NSquareHashTable[this.primaryTableSize];
         this.count = new int[this.primaryTableSize];
+        this.countSum =0;
         for (Entry<T> entry : allEntries) {
             int primaryIndex = primaryHasher.getHashedindex(entry.key);
             if(primaryTable[primaryIndex] == null){//cell has no bucket
@@ -73,13 +73,10 @@ public class perfectHashTable<T> {
             int oldValue = primaryTable[primaryIndex].rehashings;
             primaryTable[primaryIndex].insertDynamicaly(entry);
             this.secondryTablesRehashes+= primaryTable[primaryIndex].rehashings-oldValue;
-            this.count[primaryIndex] ++;
+            int oldCount = this.count[primaryIndex] ++;
+            this.countSum += (this.count[primaryIndex]*this.count[primaryIndex]) - (oldCount*oldCount);
         }
         // should implement the next section in a better way rather than O(n)
-        int countSum = 0;
-        for (int i : count) {
-            countSum += i*i;                    
-        }
         if(countSum>=2*primaryTableSize){
             return false;
         }
@@ -112,7 +109,8 @@ public class perfectHashTable<T> {
         if(!primaryTable[primaryIndex].delete(key, value)){//delete in secomdry level
             return false;
         }
-        this.count[primaryIndex]--;
+        int oldCount = this.count[primaryIndex] --;
+        this.countSum += (this.count[primaryIndex]*this.count[primaryIndex]) - (oldCount*oldCount);
         return true;
     }
     
