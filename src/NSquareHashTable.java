@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class NSquareHashTable<T> {
+public class NSquareHashTable<T> implements HashTable<T>{
     //    class Entry<T> {
 //        int key;
 //        T value;
@@ -10,14 +10,17 @@ public class NSquareHashTable<T> {
 //            this.value = value;
 //        }
 //    }
-     int dictionarySize;
-     int tableSize;
-     Entry<T>[] table;
-     int hashMatrixSize;
-     int keyBitSize;
-     int inputSize;
-     int rehashings;
-     UniversalHasher hasher;
+    int dictionarySize;
+    int tableSize;
+    Entry<T>[] table;
+    int hashMatrixSize;
+    int keyBitSize;
+    int inputSize;
+    int rehashings;
+    UniversalHasher hasher;
+
+
+    
 
     public NSquareHashTable() {//constructor for small dynamic hashTable
         this.dictionarySize = 1;
@@ -175,6 +178,8 @@ public class NSquareHashTable<T> {
         }
         return allEntries;
     }
+
+    
 
 
     

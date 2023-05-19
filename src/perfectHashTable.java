@@ -1,10 +1,7 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
-/**
- * perfectHashTable
- */
-public class perfectHashTable<T> {
+
+public class perfectHashTable<T> implements HashTable<T>{
 
     int primaryTableSize;
     NSquareHashTable<T>[] primaryTable;
@@ -18,10 +15,10 @@ public class perfectHashTable<T> {
 
     UniversalHasher primaryHasher;
 
-    public perfectHashTable(int primarydictionarySize,int keyBitSize) {
-        this.primarydictionarySize = primarydictionarySize;
+    public perfectHashTable(int dictionarySize,int keyBitSize) {
+        this.primarydictionarySize = dictionarySize;
         this.keyBitSize = keyBitSize;
-        this.primaryHashMatrixSize = (int) Math.ceil(Math.log(primarydictionarySize) / Math.log(2));
+        this.primaryHashMatrixSize = (int) Math.ceil(Math.log(dictionarySize) / Math.log(2));
         this.primaryTableSize = (int) Math.pow(2, primaryHashMatrixSize);
         this.primaryTable = new NSquareHashTable[primaryTableSize];
         this.count = new int[primaryTableSize] ;
@@ -30,7 +27,7 @@ public class perfectHashTable<T> {
         this.primaryHasher = new UniversalHasher(this.primaryHashMatrixSize, keyBitSize);
     }
 
-    boolean insert(int key,T value){
+    public boolean insert(int key,T value){
         int primaryIndex = primaryHasher.getHashedindex(key);
         if(primaryTable[primaryIndex] == null){//cell has no bucket + no collision
             primaryTable[primaryIndex] = new NSquareHashTable<>();
@@ -94,7 +91,7 @@ public class perfectHashTable<T> {
         return allEntries;
     }
 
-    boolean search(int key, T value){
+    public boolean search(int key, T value){
         int primaryIndex = primaryHasher.getHashedindex(key);
         if(primaryTable[primaryIndex] != null){//bucket available
             return primaryTable[primaryIndex].search(key, value);//search in secomdry level
@@ -102,7 +99,7 @@ public class perfectHashTable<T> {
         return false;
     }
     
-    boolean delete(int key, T value){
+    public boolean delete(int key, T value){
         int primaryIndex = primaryHasher.getHashedindex(key);
         if(primaryTable[primaryIndex] == null){//bucket available
             return false;
