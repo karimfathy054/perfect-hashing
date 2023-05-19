@@ -48,7 +48,7 @@ public class Dictionary {
             }
         }
         sc.close();
-        System.out.println(notInserted+" not inserted out of "+total+" total");
+        System.out.println(notInserted+" not inserted out of "+total+" total");//could commment it out in case of printing in CLI
         return notInserted;
     }
     int batchDelete(String path) throws FileNotFoundException{
@@ -64,7 +64,7 @@ public class Dictionary {
             }
         }
         sc.close();
-        System.out.println(notDeleted+" not deleted out of "+total+" total");
+        System.out.println(notDeleted+" not deleted out of "+total+" total");//could commment it out in case of printing in CLI
         return notDeleted;
     }
 }
