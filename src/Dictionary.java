@@ -47,6 +47,7 @@ public class Dictionary {
                 notInserted++;
             }
         }
+        sc.close();
         System.out.println(notInserted+" not inserted out of "+total+" total");
         return notInserted;
     }
@@ -62,6 +63,7 @@ public class Dictionary {
                 notDeleted++;
             }
         }
+        sc.close();
         System.out.println(notDeleted+" not deleted out of "+total+" total");
         return notDeleted;
     }
