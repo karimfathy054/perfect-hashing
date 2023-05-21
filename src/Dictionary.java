@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Dictionary {
     HashTable<String> hashTable;
-
     boolean initialize(int hashTableType, int hashTableSize){
         switch (hashTableType) {
             case 1:
@@ -27,15 +26,15 @@ public class Dictionary {
 
     boolean delete(String singleString){
         int key = singleString.hashCode();
-        return this.hashTable.insert(key, singleString);
+        return this.hashTable.delete(key, singleString);
     }
-
     boolean search(String singleString){
         int key = singleString.hashCode();
-        return this.hashTable.insert(key, singleString);
+        return this.hashTable.search(key, singleString);
     }
 
-    int batchInsert(String path) throws FileNotFoundException{
+    int  batchInsert(String path) throws FileNotFoundException{
+
         File file = new File(path);
         Scanner sc = new Scanner(file);
         int notInserted,total;
@@ -48,8 +47,8 @@ public class Dictionary {
             }
         }
         sc.close();
-        System.out.println(notInserted+" not inserted out of "+total+" total");//could commment it out in case of printing in CLI
-        return notInserted;
+        System.out.println(notInserted+" not inserted out of "+total+" total inserted");//could commment it out in case of printing in CLI
+        return (total - notInserted);
     }
     int batchDelete(String path) throws FileNotFoundException{
         File file = new File(path);
@@ -65,6 +64,9 @@ public class Dictionary {
         }
         sc.close();
         System.out.println(notDeleted+" not deleted out of "+total+" total");//could commment it out in case of printing in CLI
-        return notDeleted;
+        return (total - notDeleted);
+    }
+    int noOfRehash(){
+        return this.hashTable.getRehash();
     }
 }

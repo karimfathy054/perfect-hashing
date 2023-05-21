@@ -1,13 +1,5 @@
 import java.util.ArrayList;
 public class NSquareHashTable<T> implements HashTable<T>{
-    //    class Entry<T> {
-//        int key;
-//        T value;
-//        public Entry(int key, T value) {
-//            this.key = key;
-//            this.value = value;
-//        }
-//    }
     int dictionarySize;
     int tableSize;
     Entry<T>[] table;
@@ -118,7 +110,12 @@ public class NSquareHashTable<T> implements HashTable<T>{
         return true;
     }
 
-    private boolean rehashAndInsert(Entry e) {
+    @Override
+    public int getRehash() {
+        return this.rehashings;
+    }
+
+    private boolean rehashAndInsert(Entry e) {//O(N^2) complexity could do better
         Entry[] temp = new Entry[this.tableSize];
         this.hasher = new UniversalHasher(this.hashMatrixSize, this.keyBitSize);
         for (int i = 0; i < table.length; i++) {
@@ -142,7 +139,7 @@ public class NSquareHashTable<T> implements HashTable<T>{
     }
 
     public boolean search(int key, T value) {
-        int hashingIndex = hasher.getHashedindex(key);
+        int hashingIndex = hasher.getHashedindex(key);// getting the hased index is time consuming and not in O(1) time complexity
         if (table[hashingIndex] != null && table[hashingIndex].key == key && table[hashingIndex].value.equals(value)) {//////may inc order
             return true;
         }
@@ -175,11 +172,6 @@ public class NSquareHashTable<T> implements HashTable<T>{
             allEntries.add(entry);
         }
         return allEntries;
-    }
-
-    @Override
-    public int getRehashes() {
-        return this.rehashings;
     }
 
     
