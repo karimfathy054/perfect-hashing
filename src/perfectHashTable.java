@@ -48,12 +48,12 @@ public class perfectHashTable<T> implements HashTable<T>{
         // should implement the next section in a better way
 
         
-        if(this.countSum>=2*primaryTableSize){
-            //rehash
-            do{
-                this.primaryTableRehashes++;
-            }while (!primaryRehash()) ;
-        }
+        // if(this.countSum>=2*primaryTableSize){
+        //     //rehash
+        //     do{
+        //         this.primaryTableRehashes++;
+        //     }while (!primaryRehash()) ;
+        // }
         return true;
     }
 
@@ -110,6 +110,11 @@ public class perfectHashTable<T> implements HashTable<T>{
         int oldCount = this.count[primaryIndex] --;
         this.countSum += (this.count[primaryIndex]*this.count[primaryIndex]) - (oldCount*oldCount);
         return true;
+    }
+
+    @Override
+    public int getRehashes() {
+        return this.secondryTablesRehashes;
     }
 
     // public static void main(String[] args) {

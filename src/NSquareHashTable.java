@@ -38,7 +38,7 @@ public class NSquareHashTable<T> implements HashTable<T>{
         if (table[hashingIndex] != null && table[hashingIndex].key == key) {//same key is inserted twice
             return false;
         }
-        if (inputSize == dictionarySize) {//size won't fit
+        if (inputSize == this.tableSize) {//size won't fit
             this.dictionarySize++;
             int nSquare = dictionarySize * dictionarySize;
             this.hashMatrixSize = (int) Math.ceil(Math.log(nSquare) / Math.log(2));
@@ -66,7 +66,7 @@ public class NSquareHashTable<T> implements HashTable<T>{
         if (table[hashingIndex] != null && table[hashingIndex].key == entry.key) {//same key is inserted twice
             return false;
         }
-        if (inputSize == dictionarySize) {//size won't fit
+        if (inputSize == this.tableSize) {//size won't fit
             this.dictionarySize++;
             int nSquare = dictionarySize * dictionarySize;
             this.hashMatrixSize = (int) Math.ceil(Math.log(nSquare) / Math.log(2));
@@ -101,7 +101,7 @@ public class NSquareHashTable<T> implements HashTable<T>{
     }
 
     public boolean insert(int key, T value) {
-        if (inputSize == dictionarySize)
+        if (inputSize == this.tableSize)
             return false;
         Entry<T> entry = new Entry<>(key, value);
         int hashingIndex = hasher.getHashedindex(key);
@@ -175,6 +175,11 @@ public class NSquareHashTable<T> implements HashTable<T>{
             allEntries.add(entry);
         }
         return allEntries;
+    }
+
+    @Override
+    public int getRehashes() {
+        return this.rehashings;
     }
 
     
